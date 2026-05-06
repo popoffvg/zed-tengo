@@ -1,0 +1,16 @@
+id = "tengo"
+name = "Tengo"
+version = "0.1.0"
+schema_version = 1
+description = "Tengo language support for Zed."
+repository = "https://github.com/popoffvg/zed-tengo"
+authors = ["Vitalii Popov <popoffvg@gmail.com>"]
+languages = ["languages/tengo"]
+
+[grammars.tengo]
+repository = "https://github.com/popoffvg/tree-sitter-tengo"
+rev = "587a88712effa8e50d3d4967411aa8f18a6dd38e"
+
+[language_servers.tengo-lsp]
+name = "Tengo LSP"
+languages = ["Tengo"]
