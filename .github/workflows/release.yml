@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check version matches tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          MANIFEST="$(grep -m1 '^version' extension.toml | sed -E 's/.*"(.*)".*/\1/')"
+          echo "tag=$VERSION manifest=$MANIFEST"
+          if [ "$VERSION" != "$MANIFEST" ]; then
+            echo "::error::extension.toml version ($MANIFEST) does not match tag ($VERSION)"
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - name: Install Rust wasm target
+        run: rustup target add wasm32-wasip1
+
+      - name: Build extension wasm
+        run: cargo build --release --target wasm32-wasip1
+
+      - name: Package extension source
+        run: |
+          tar -czf "zed-tengo-${VERSION}.tar.gz" \
+            extension.toml Cargo.toml Cargo.lock src languages
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: zed-tengo-${{ env.VERSION }}.tar.gz
+          generate_release_notes: true
+          body: |
+            Tengo extension for Zed `v${{ env.VERSION }}`.
+
+            Install via the Zed extension registry (search "Tengo"), or load this
+            source as a dev extension. The language server (`tengo-lsp`) is
+            downloaded automatically from its own releases.
+
+            To publish to the Zed registry, open a PR adding/bumping this
+            extension in https://github.com/zed-industries/extensions referencing
+            this tag.
