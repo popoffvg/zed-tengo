@@ -1,22 +1,24 @@
 ; Functions: foo := func(...) { ... }
-; @context is intentionally omitted so the outline shows just the name,
-; matching the LSP's document outline (`builder` rather than `func builder`).
 (var_declaration
   name: (identifier) @name
-  value: (func_literal)) @item
+  value: (func_literal
+    "func" @context)) @item
 
 (assignment_statement
   left: (identifier) @name
-  right: (func_literal)) @item
+  right: (func_literal
+    "func" @context)) @item
 
 ; Imports: alias := import("...")
 (var_declaration
   name: (identifier) @name
-  value: (import_expression)) @item
+  value: (import_expression
+    "import" @context)) @item
 
 (assignment_statement
   left: (identifier) @name
-  right: (import_expression)) @item
+  right: (import_expression
+    "import" @context)) @item
 
 ; Map-literal constants / schemas (e.g. _DATA_INFO_SCHEMA := { ... })
 (var_declaration
@@ -29,9 +31,13 @@
 
 ; Method-like entries inside a map literal (builder objects, export maps):
 ;   foo: func(...) { ... }
+; Picking up the `func` keyword as context gives them the same colored prefix
+; as top-level functions.
 (map_entry
   key: (identifier) @name
-  value: (func_literal)) @item
+  value: (func_literal
+    "func" @context)) @item
 
 ; Export block
-(export_statement) @item
+(export_statement
+  "export" @context) @item
