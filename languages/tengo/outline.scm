@@ -29,6 +29,13 @@
   left: (identifier) @name
   right: (map_literal)) @item
 
+; Method-like entries inside a map literal (builder objects, export maps):
+;   foo: func(...) { ... }
+(map_entry
+  key: (identifier) @name
+  value: (func_literal
+    "func" @context)) @item
+
 ; Export block
 (export_statement
   "export" @context) @item
