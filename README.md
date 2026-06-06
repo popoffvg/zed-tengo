@@ -15,7 +15,10 @@ IDE features powered by [`tengo-lsp`](https://github.com/popoffvg/tengo-lsp).
   - **find all references** across the workspace for exported module members
     (every `alias.member` usage plus references inside the defining module);
   - member completion after `.` on imported aliases;
-  - hover with signature and doc comments (`//` and `/** */`).
+  - hover with signature and doc comments (`//` and `/** */`);
+  - **formatting** — reindents with hard tabs (one level per enclosing
+    `{}`/`[]`/`()`) and strips trailing whitespace; comments are preserved and
+    code is never reflowed (requires `tengo-lsp` ≥ v0.2.0).
 - Platforma-style **import resolution**: local `:artifact` ids against the
   package `src/`, and `pkg:artifact` ids via `node_modules`, including the
   published `dist/tengo/{lib,software,asset}` layout.
@@ -49,6 +52,22 @@ on `PATH` (e.g. `~/.local/bin`).
 > On macOS (Apple Silicon), if you replace the binary by copying it, re-sign it
 > with `codesign --force --sign - <path>` — otherwise the OS may kill the
 > unsigned copy on launch.
+
+### Formatting
+
+Works out of the box — no configuration. `tengo-lsp` advertises
+`textDocument/formatting`, and Zed's defaults (`"format_on_save": "on"`,
+`"formatter": "auto"`) route Tengo through it: there is no Prettier for Tengo,
+so `auto` falls back to the language server. **Format Document**
+(`editor: format`) and format-on-save just work, and the extension sets
+`hard_tabs` so manual edits already match the formatter's tab output.
+
+To force the language server explicitly (e.g. if you've changed the global
+defaults), add to `settings.json`:
+
+```json
+{ "languages": { "Tengo": { "formatter": "language_server" } } }
+```
 
 ## Versioning
 

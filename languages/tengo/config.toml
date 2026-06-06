@@ -1,6 +1,11 @@
 name = "Tengo"
 grammar = "tengo"
 path_suffixes = ["tengo"]
+# tengo-lsp formats with hard tabs (one level per enclosing block), so indent
+# with tabs to match — otherwise the editor inserts spaces that formatting then
+# rewrites.
+hard_tabs = true
+tab_size = 4
 line_comments = ["// "]
 block_comment = ["/* ", " */"]
 autoclose_before = ";:.,=}])> \n"

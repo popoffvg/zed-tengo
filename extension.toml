@@ -1,6 +1,6 @@
 id = "tengo"
 name = "Tengo"
-version = "0.1.7"
+version = "0.1.8"
 schema_version = 1
 description = "Tengo language support for Zed."
 repository = "https://github.com/popoffvg/zed-tengo"
